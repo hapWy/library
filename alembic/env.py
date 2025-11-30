@@ -39,11 +39,14 @@ def do_run_migrations(connection):
         context.run_migrations()
 
 async def run_async_migrations():
-    """Run migrations with async engine."""
-    connectable = create_async_engine(DATABASE_URL)
+    url = config.get_main_option("sqlalchemy.url")
+    print("DATABASE_URL repr:", repr(DATABASE_URL), type(DATABASE_URL))
+
+    connectable = create_async_engine(url, future=True)
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
+
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""

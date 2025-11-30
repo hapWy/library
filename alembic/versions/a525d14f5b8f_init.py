@@ -1,8 +1,8 @@
 """init
 
-Revision ID: da87ac5e4dac
+Revision ID: a525d14f5b8f
 Revises: 
-Create Date: 2025-11-30 13:37:36.250845
+Create Date: 2025-11-30 19:28:03.616704
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'da87ac5e4dac'
+revision: str = 'a525d14f5b8f'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -73,9 +73,9 @@ def upgrade() -> None:
     sa.CheckConstraint('price >= 0', name='check_price'),
     sa.CheckConstraint('publish_year BETWEEN 1500 AND EXTRACT(YEAR FROM CURRENT_DATE)', name='check_publish_year'),
     sa.CheckConstraint('quantity >= 0', name='check_quantity'),
-    sa.ForeignKeyConstraint(['author_id'], ['authors.author_id'], ),
+    sa.ForeignKeyConstraint(['author_id'], ['authors.author_id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['library_id'], ['libraries.library_id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['topic_id'], ['topics.topic_id'], ),
+    sa.ForeignKeyConstraint(['topic_id'], ['topics.topic_id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('book_id')
     )
     op.create_index(op.f('ix_books_book_id'), 'books', ['book_id'], unique=False)
@@ -89,9 +89,9 @@ def upgrade() -> None:
     sa.Column('return_date', sa.Date(), nullable=True),
     sa.Column('deposit', sa.Numeric(precision=10, scale=2), nullable=True),
     sa.CheckConstraint('deposit >= 0', name='check_deposit'),
-    sa.ForeignKeyConstraint(['book_id'], ['books.book_id'], ),
-    sa.ForeignKeyConstraint(['library_id'], ['libraries.library_id'], ),
-    sa.ForeignKeyConstraint(['reader_id'], ['readers.reader_id'], ),
+    sa.ForeignKeyConstraint(['book_id'], ['books.book_id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['library_id'], ['libraries.library_id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['reader_id'], ['readers.reader_id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('subscription_id')
     )
     op.create_index(op.f('ix_subscriptions_subscription_id'), 'subscriptions', ['subscription_id'], unique=False)

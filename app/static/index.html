@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотечная система</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Библиотечная система</h1>
+            <nav>
+                <button class="nav-btn active" data-target="tables">Таблицы</button>
+                <button class="nav-btn" data-target="reports">Отчеты</button>
+                <button class="nav-btn" data-target="subscription-form">Выдача книг</button>
+                <!-- Добавьте эту кнопку временно в index.html для тестирования -->
+    <button onclick="testBookCreation()">Тест создания книги</button>
+
+    <script>
+    async function testBookCreation() {
+        const testData = {
+            title: "Тестовая книга",
+            publisher: "Тестовое издательство",
+            publish_place: "Москва",
+            publish_year: 2023,
+            quantity: 5,
+            price: 500.0,
+            library_id: 2,
+            topic_id: 3,
+            author_id: 2
+        };
+
+        console.log('🧪 Testing book creation with:', testData);
+
+        try {
+            const response = await fetch('/api/books/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(testData)
+            });
+
+            console.log('📋 Response status:', response.status);
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Success:', result);
+                alert('Книга создана успешно!');
+            } else {
+                const error = await response.json();
+                console.log('❌ Error details:', error);
+                alert('Ошибка: ' + JSON.stringify(error));
+            }
+        } catch (error) {
+            console.error('🌐 Network error:', error);
+            alert('Сетевая ошибка: ' + error.message);
+        }
+    }
+    </script>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Таблицы -->
+            <section id="tables" class="content-section active">
+                <div class="controls">
+                    <select id="table-select">
+                        <option value="libraries">Библиотеки</option>
+                        <option value="topics">Темы</option>
+                        <option value="authors">Авторы</option>
+                        <option value="books">Книги</option>
+                        <option value="readers">Читатели</option>
+                        <option value="subscriptions">Подписки</option>
+                    </select>
+                    <button id="add-btn">Добавить</button>
+                    <input type="text" id="search-input" placeholder="Поиск...">
+                    <select id="sort-select">
+                        <option value="">Сортировка</option>
+                    </select>
+                    <select id="filter-select">
+                        <option value="">Фильтр</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table id="data-table">
+                        <thead>
+                            <tr>
+                                <!-- Заголовки заполняются динамически -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Данные заполняются динамически -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="prev-btn">← Назад</button>
+                    <span id="page-info">Страница 1</span>
+                    <button id="next-btn">Вперед →</button>
+                </div>
+            </section>
+
+            <!-- Отчеты -->
+            <section id="reports" class="content-section">
+                <div class="report-controls">
+                    <select id="report-select">
+                        <option value="library-stats">Статистика библиотек</option>
+                        <option value="author-stats">Статистика авторов</option>
+                        <option value="active-subscriptions">Активные подписки</option>
+                        <option value="book-prices">Цены книг по библиотекам</option>
+                    </select>
+                    <div id="report-filters">
+                        <!-- Фильтры заполняются динамически -->
+                    </div>
+                    <button id="generate-report">Сформировать отчет</button>
+                </div>
+                <div class="report-container">
+                    <table id="report-table">
+                        <!-- Отчет заполняется динамически -->
+                    </table>
+                </div>
+            </section>
+
+            <!-- Форма выдачи книг (1:М) -->
+            <section id="subscription-form" class="content-section">
+                <h2>📖 Выдача книги читателю</h2>
+                <form id="subscription-form-element">
+                    <div class="form-group">
+                        <label for="reader-select">Читатель:</label>
+                        <select id="reader-select" required>
+                            <option value="">Выберите читателя</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-select">Книга:</label>
+                        <select id="book-select" required>
+                            <option value="">Выберите книгу</option>
+                        </select>
+                        <span id="book-quantity"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="library-select">Библиотека:</label>
+                        <select id="library-select" required>
+                            <option value="">Выберите библиотеку</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deposit">Залог:</label>
+                        <input type="number" id="deposit" step="0.01" min="0" value="0">
+                    </div>
+                    <button type="submit">Выдать книгу</button>
+                </form>
+                <div id="subscription-result"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модальное окно для редактирования -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Редактирование</h2>
+            <form id="modal-form">
+                <!-- Форма заполняется динамически -->
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

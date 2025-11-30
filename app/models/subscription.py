@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Numeric, Date, DateTime, ForeignKey, CheckConstraint
+from sqlalchemy import Column, Integer, Date, Numeric, ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db.base_class import Base
@@ -7,9 +7,9 @@ class Subscription(Base):
     __tablename__ = "subscriptions"
     
     subscription_id = Column(Integer, primary_key=True, index=True)
-    library_id = Column(Integer, ForeignKey('libraries.library_id'), nullable=False)
-    book_id = Column(Integer, ForeignKey('books.book_id'), nullable=False)
-    reader_id = Column(Integer, ForeignKey('readers.reader_id'), nullable=False)
+    library_id = Column(Integer, ForeignKey('libraries.library_id', ondelete='CASCADE'), nullable=False)
+    book_id = Column(Integer, ForeignKey('books.book_id', ondelete='CASCADE'), nullable=False)
+    reader_id = Column(Integer, ForeignKey('readers.reader_id', ondelete='CASCADE'), nullable=False)
     issue_date = Column(Date, server_default=func.current_date())
     return_date = Column(Date)
     deposit = Column(Numeric(10, 2), default=0)

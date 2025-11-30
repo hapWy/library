@@ -54,7 +54,22 @@ async def return_book(db: AsyncSession, subscription_id: int) -> bool:
     subscription = result.scalar_one_or_none()
     
     if subscription:
-        await db.delete(subscription)
+        # Если книга еще не возвращена, увеличиваем количество
+        if not subscription.return_date:
+            # Получаем книгу и увеличиваем количество
+            book_result = await db.execute(
+                select(Book).where(Book.book_id == subscription.book_id)
+            )
+            book = book_result.scalar_one_or_none()
+            
+            if book:
+                book.quantity += 1
+                print(f"✅ Book quantity increased: {book.title} now has {book.quantity} copies")
+        
+        # Устанавливаем дату возврата
+        from datetime import date
+        subscription.return_date = date.today()
+        
         await db.commit()
         return True
     return False

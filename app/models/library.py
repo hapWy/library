@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Numeric, Date, DateTime, ForeignKey, CheckConstraint
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db.base_class import Base
@@ -12,14 +12,5 @@ class Library(Base):
     phone = Column(String(20))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
-    books = relationship("Book", back_populates="library")
-    subscriptions = relationship("Subscription", back_populates="library")
-
-
-
-
-
-
-
-
-
+    books = relationship("Book", back_populates="library", cascade="all, delete-orphan")
+    subscriptions = relationship("Subscription", back_populates="library", cascade="all, delete-orphan")

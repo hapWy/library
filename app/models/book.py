@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, Numeric, Date, DateTime, ForeignKey, CheckConstraint
+from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 from app.db.base_class import Base
 
 class Book(Base):
@@ -8,8 +7,8 @@ class Book(Base):
     
     book_id = Column(Integer, primary_key=True, index=True)
     library_id = Column(Integer, ForeignKey('libraries.library_id', ondelete='CASCADE'), nullable=False)
-    topic_id = Column(Integer, ForeignKey('topics.topic_id'), nullable=False)
-    author_id = Column(Integer, ForeignKey('authors.author_id'), nullable=False)
+    topic_id = Column(Integer, ForeignKey('topics.topic_id', ondelete='CASCADE'), nullable=False)
+    author_id = Column(Integer, ForeignKey('authors.author_id', ondelete='CASCADE'), nullable=False)
     title = Column(String(200), nullable=False, index=True)
     publisher = Column(String(100))
     publish_place = Column(String(100))
