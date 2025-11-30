@@ -24,8 +24,6 @@ services:
       DATABASE_URL: postgresql+asyncpg://postgres:1@db:5432/library
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
-
+    
 volumes:
   postgres_data:

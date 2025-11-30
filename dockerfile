@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# скрипт должен быть исполняемым
+
 RUN chmod +x /app/start.sh
 
 CMD ["./start.sh"]
